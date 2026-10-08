@@ -1,0 +1,56 @@
+name: Validate riichi toolkit
+on:
+  push:
+    paths:
+      - index.html
+      - sw.js
+      - manifest.webmanifest
+      - .github/workflows/validate.yml
+  workflow_dispatch:
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Check JavaScript syntax and scoring examples
+        run: |
+          node <<'NODE'
+          const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict');
+          const html=fs.readFileSync('index.html','utf8');
+          const scripts=[...html.matchAll(/<script>([\s\S]*?)<\/script>/g)];
+          assert.equal(scripts.length,1,'exactly one inline application script');
+          const script=scripts[0][1];
+          new vm.Script(script,{filename:'app.js'});
+          const context={document:{addEventListener(){}},console};
+          vm.createContext(context);vm.runInContext(script,context);
+          const tests=[
+            [{han:1,fu:30,dealer:false,tsumo:false},1000],
+            [{han:2,fu:30,dealer:false,tsumo:false},2000],
+            [{han:3,fu:30,dealer:false,tsumo:false},3900],
+            [{han:4,fu:30,dealer:false,tsumo:false},7700],
+            [{han:4,fu:30,dealer:true,tsumo:false},11600],
+            [{han:4,fu:40,dealer:false,tsumo:false},8000],
+            [{han:3,fu:70,dealer:false,tsumo:false},8000],
+            [{han:1,fu:30,dealer:false,tsumo:true},1100],
+            [{han:2,fu:20,dealer:false,tsumo:true},1500],
+            [{han:5,fu:30,dealer:false,tsumo:true},8000],
+            [{han:6,fu:30,dealer:true,tsumo:true},18000],
+            [{han:13,fu:30,dealer:false,tsumo:false},32000],
+            [{han:2,fu:25,dealer:false,tsumo:false,honba:2,sticks:3},2200],
+            [{han:4,fu:30,dealer:false,tsumo:false,kiriage:true},8000]
+          ];
+          for(const [input,expected] of tests)assert.equal(context.scorePoints(input).normal,expected,JSON.stringify(input));
+          const hand=Array(34).fill(0);
+          [0,1,2,9,10,11,18,19,20,27,27,27,31,31].forEach(i=>hand[i]++);
+          assert.equal(context.handShanten(hand).min,-1,'completed hand');
+          hand[31]--;assert.equal(context.handShanten(hand).min,0,'tenpai hand');
+          assert.ok(html.includes('id="tab-rules"')&&html.includes('id="tab-yaku"'),'main sections exist');
+          console.log('PASS: JavaScript syntax, 14 scoring cases, 2 shanten cases, HTML sections');
+          NODE
+      - name: Validate manifest and service worker syntax
+        run: |
+          node --check sw.js
+          node -e "const f=require('./manifest.webmanifest'); if(f.start_url!=='./')process.exit(1); console.log('manifest OK')"
