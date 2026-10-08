@@ -123,7 +123,7 @@ const Z=[
 ['suuankou','四暗刻','四组暗刻/暗杠，荣和双碰通常不成立。'],
 ['daisangen','大三元','白发中各组成刻子/杠。'],
 ['shousuushi','小四喜','三种风牌刻子/杠，第四种风牌对子。'],
-['daisuushi','大四喜','四种风牌均成刻子/杠；部分规则双倍役满。'],
+['daisuushi','大四喜','四种风牌均成刻子/杠；部分规则双倍役满。',2],
 ['tsuuiisou','字一色','手牌全部为字牌。'],
 ['chinroutou','清老头','手牌全部由数牌1、9组成。'],
 ['ryuuiisou','绿一色','由绿牌组成：索子2、3、4、6、8及发。'],
@@ -167,7 +167,7 @@ function setup(){
  calc();renderHand();renderYaku();renderTable();renderLimits();
  try{if('serviceWorker'in navigator)navigator.serviceWorker.register('./sw.js').catch(()=>{});}catch(e){}
 }
-function activate(tab){document.querySelectorAll('.panel').forEach(el=>el.hidden=(el.id!=='tab-'+tab));document.querySelectorAll('.tab').forEach(el=>el.setAttribute('aria-selected',String(el.dataset.tab===tab)));window.scrollTo({top:0,behavior:'instant'});}
+function activate(tab){document.querySelectorAll('.panel').forEach(el=>el.hidden=(el.id!=='tab-'+tab));document.querySelectorAll('.tab').forEach(el=>el.setAttribute('aria-selected',String(el.dataset.tab===tab)));window.scrollTo(0,0);}
 function namesChecked(cls){return Array.from(document.querySelectorAll('.'+cls+':checked')).map(e=>e.value);}
 function calc(){
  let closed=v('closed')==='1',tsumo=v('win')==='tsumo',dealer=v('dealer')==='1',warnings=[],notes=[],han=0,fu=30,yakuman=0,yakuHan=0;
@@ -214,6 +214,10 @@ function calc(){
   const activeYaku=namesChecked('yakumanCb');
   for(const id of activeYaku){const z=Z.find(x=>x[0]===id);if(z)yakuman+=z[3]&&$('doubleYakuman').checked?2:1;}
   if(activeYaku.includes('kokushi')&&activeYaku.includes('kokushi13')||activeYaku.includes('suuankou')&&activeYaku.includes('suuankouTanki')||activeYaku.includes('chuuren')&&activeYaku.includes('junseiChuuren'))warnings.push('役满及其特殊待牌形只能选一种，不能重复计算');
+  const menzenYakuman=['kokushi','kokushi13','suuankou','suuankouTanki','chuuren','junseiChuuren','tenhou','chiihou'];
+  if(!closed&&activeYaku.some(id=>menzenYakuman.includes(id)))warnings.push('国士无双、四暗刻、九莲宝灯、天和和地和等役满要求门清');
+  if(activeYaku.includes('tenhou')&&(!dealer||!tsumo))warnings.push('天和必须庄家配牌即自摸和牌');
+  if(activeYaku.includes('chiihou')&&(dealer||!tsumo))warnings.push('地和必须闲家第一巡自摸且未被鸣牌打断');
   if(activeYaku.length&&sel.length)notes.push('役满成立时普通役和宝牌不再另加分');
   if(yakuman===0&&yakuHan===0)warnings.push('无有效和牌役：宝牌不能单独作为役');
   if(kanCount>4)warnings.push('刻/杠面子总数最多4组');
