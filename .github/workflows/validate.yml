@@ -53,4 +53,4 @@ jobs:
       - name: Validate manifest and service worker syntax
         run: |
           node --check sw.js
-          node -e "const f=require('./manifest.webmanifest'); if(f.start_url!=='./')process.exit(1); console.log('manifest OK')"
+          node -e "const fs=require('fs'),f=JSON.parse(fs.readFileSync('manifest.webmanifest','utf8')); if(f.start_url!=='./')process.exit(1); console.log('manifest OK')"
