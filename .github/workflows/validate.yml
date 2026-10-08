@@ -55,8 +55,26 @@ jobs:
           assert.match(nodes.scoreHeadline.textContent,/1番 30符/,'calculator renders selected riichi');
           assert.match(nodes.scorePayment.innerHTML,/1,000/,'calculator renders 1000-point non-dealer ron');
           assert.ok(!nodes.scoreWarnings.innerHTML,'no incorrect warning for basic riichi');
+          const seatMap={2:'S',3:'W',4:'N',5:'E',6:'S',7:'W',8:'N',9:'E',10:'S',11:'W',12:'N'};
+          for(let total=2;total<=12;total++){
+            const result=context.findWallBreak(total);
+            assert.equal(result.seat,seatMap[total],'seat for total '+total);
+            assert.equal(result.stack,total,'wall break stack matches total');
+            assert.equal(result.leftStacks+result.rightStacks,17,'seventeen stacks');
+            assert.equal(result.deadHere+result.deadAcross,7,'seven dead wall stacks');
+          }
+          context.setDiceTotal(10);
+          assert.equal(nodes.wallWhere.textContent,'南家牌墙');
+          assert.equal(nodes.wallStack.textContent,'右数第10墩');
+          assert.equal(Number(nodes.diceOneInput.value)+Number(nodes.diceTwoInput.value),10);
+          assert.ok(nodes.wallStacks.innerHTML.includes('breakpoint'),'break location diagram renders');
+          nodes.diceOneInput.value=2;nodes.diceTwoInput.value=5;
+          context.syncDiceToTotal();
+          assert.equal(nodes.wallWhere.textContent,'西家牌墙','dice change updates wall');
+          assert.equal(nodes.diceTotalSelect.value,7,'dice change updates total');
+          assert.equal(context.findWallBreak(2).deadAcross,5,'dead wall can cross neighboring wall');
           assert.ok(html.includes('id="tab-rules"')&&html.includes('id="tab-yaku"'),'main sections exist');
-          console.log('PASS: JS syntax, 14 scoring cases, 2 shanten cases, live calculator smoke, HTML sections');
+          console.log('PASS: JS syntax, 14 scoring cases, 2 shanten cases, 11 wall mappings, interactive dice smoke, HTML sections');
           NODE
       - name: Validate manifest and service worker syntax
         run: |
