@@ -4,6 +4,13 @@
 
 **在线地址：** https://qipature.github.io/riichi-calculator/
 
+
+## 中文规则手册
+
+📖 [四人日本立直麻将规则手册（川麻玩家入门版）](./riichi-rules-zh.md)
+
+手册为 UTF-8 with BOM 编码、手机友好的纯 Markdown 文件。直接点击上面的 GitHub 链接，可在手机浏览器阅读；如需文件，打开后使用 GitHub 的 Raw / Download raw file。
+
 ## 功能
 
 - **番符计算器**：按役种选择或直接输入番符；荣和、自摸、庄闲、本场、立直供托；宝牌、赤宝牌、里宝牌；刻杠、雀头、听牌符；满贯至役满。发现常见规则冲突时暂停结算。
