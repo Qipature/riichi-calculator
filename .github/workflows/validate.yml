@@ -3,6 +3,8 @@ on:
   push:
     paths:
       - index.html
+      - learning.js
+      - tests/**
       - sw.js
       - manifest.webmanifest
       - .github/workflows/validate.yml
@@ -26,6 +28,9 @@ jobs:
           new vm.Script(script,{filename:'app.js'});
           const context={document:{addEventListener(){}},console};
           vm.createContext(context);vm.runInContext(script,context);
+          // Load the same external learning module that the browser uses.
+          assert.ok(html.includes('src="./learning.js"'),'learning module included');
+          vm.runInContext(fs.readFileSync('learning.js','utf8'),context,{filename:'learning.js'});
           const tests=[
             [{han:1,fu:30,dealer:false,tsumo:false},1000],
             [{han:2,fu:30,dealer:false,tsumo:false},2000],
@@ -76,6 +81,8 @@ jobs:
           assert.ok(html.includes('id="tab-rules"')&&html.includes('id="tab-yaku"'),'main sections exist');
           console.log('PASS: JS syntax, 14 scoring cases, 2 shanten cases, 11 wall mappings, interactive dice smoke, HTML sections');
           NODE
+      - name: Validate glossary and winning hand examples
+        run: node tests/learning.test.cjs
       - name: Validate manifest and service worker syntax
         run: |
           node --check sw.js
