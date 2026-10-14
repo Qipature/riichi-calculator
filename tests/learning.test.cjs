@@ -8,9 +8,9 @@ const context = { document: { addEventListener() {} } };
 vm.createContext(context);
 vm.runInContext(html.match(/<script>([\s\S]*?)<\/script>/)[1], context);
 vm.runInContext(fs.readFileSync(path.join(root, 'learning.js'), 'utf8'), context);
-const data = JSON.parse(vm.runInContext('JSON.stringify({Y,Z,HONOR_YAKU,YAKU_EXAMPLES,GLOSSARY})', context));
+const data = JSON.parse(vm.runInContext('JSON.stringify({Y,Z,HONOR_YAKU,ANCIENT_YAKU,YAKU_EXAMPLES,GLOSSARY})', context));
 const uniqueHands = new Set();
-for (const yaku of [...data.Y, ...data.Z, ...data.HONOR_YAKU]) {
+for (const yaku of [...data.Y, ...data.Z, ...data.HONOR_YAKU, ...data.ANCIENT_YAKU]) {
  const example = data.YAKU_EXAMPLES[yaku[0]];
  assert.ok(example, `Missing example: ${yaku[0]}`);
  const [shape, win, note] = example;
@@ -72,7 +72,13 @@ for (const yaku of [...data.Y, ...data.Z, ...data.HONOR_YAKU]) {
  assert.ok(rendered.lastIndexOf('winning-zone') > rendered.lastIndexOf('example-hand'), `Winning tile is rightmost zone: ${yaku[0]}`);
 }
 assert.ok(!data.Y.some(y => y[0] === 'yakuhaiExtra'), 'Ambiguous/double-countable extra yakuhai removed');
-assert.equal(data.HONOR_YAKU.length, 6);
+assert.equal(data.HONOR_YAKU.length, 4);
+assert.equal(data.HONOR_YAKU[0][1], '役牌 · 白（发、中）');
+assert.equal(data.ANCIENT_YAKU.length, 17);
+for (const [id] of data.ANCIENT_YAKU) {
+ assert.ok(!data.Y.concat(data.Z).some(y=>y[0]===id), `Ancient yaku must never become calculator selection: ${id}`);
+}
+
 assert.equal(data.GLOSSARY.length, 8);
 assert.ok(fs.readFileSync(path.join(root, 'sw.js'), 'utf8').includes("'./learning.js'"));
 assert.ok(fs.readFileSync(path.join(root, 'sw.js'), 'utf8').includes("'./assets/tiles.svg'"));

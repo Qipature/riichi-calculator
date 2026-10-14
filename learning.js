@@ -41,20 +41,121 @@ const YAKU_EXAMPLES = {
  kokushi13:["19m 19p 19s 1234567z 4z", "4z", "原手13种幺九字牌各一张，十三面待；荣和北形成对子。是否双倍役满依桌规。", {"melds": [], "focus": []}],
  suuankouTanki:["666m 222p 777s 333z 88m", "8m", "门清，6万、2筒、7索、西四个暗刻已完成；8万单骑，可荣和或自摸。双倍役满依桌规。", {"melds": [], "focus": [0, 1, 2, 3]}],
  junseiChuuren:["1112345678999s 6s", "6s", "原手恰好为1112345678999索，听1～9索；荣和6索。是否双倍役满依桌规。", {"melds": [], "focus": []}],
- dragonWhite:["555z 234m 678p 345s 66m", "5s", "白刻子已碰，计1番；荣和5索。白对子不能成立役牌，与自风、场风无关。", {"melds": [{"group": 0, "type": "pon"}], "focus": [0]}],
- dragonGreen:["666z 789m 234p 456s 88p", "6s", "发刻子已碰，计1番；荣和6索。发对子不能成立役牌，与自风、场风无关。", {"melds": [{"group": 0, "type": "pon"}], "focus": [0]}],
- dragonRed:["777z 345m 567p 234s 11s", "4s", "中刻子已碰，计1番；荣和4索。中对子不能成立役牌，与自风、场风无关。", {"melds": [{"group": 0, "type": "pon"}], "focus": [0]}],
+ dragonWhite:["555z 234m 678p 345s 66m", "5s", "此例碰白，荣和5索，白计1番。把这组白换成发或中也成立，各自都是1番；两种三元刻子就分别加1番，不能因图鉴合并而只算一次。", {"melds": [{"group": 0, "type": "pon"}], "focus": [0]}],
  seatWind:["333z 456m 678p 234s 55m", "4s", "东场、西家：西刻子已碰，属于自风（席风），计1番；荣和4索。西不是本局场风。", {"melds": [{"group": 0, "type": "pon"}], "focus": [0]}],
  roundWind:["222z 123p 456s 789m 33s", "6s", "南场、东家：南刻子已碰，属于场风，计1番；荣和6索。南不是本局自风。", {"melds": [{"group": 0, "type": "pon"}], "focus": [0]}],
  doubleWind:["222z 234m 456p 789s 44m", "9s", "南场、南家：南刻子已碰，同时满足自风与场风，合计2番；荣和9索。一组南只需勾一次。", {"melds": [{"group": 0, "type": "pon"}], "focus": [0]}],
+ renhou:["123p 456m 789m 222s 55z", "3p", "闲家在第一次摸牌前就荣和3筒，之前无人吃碰杠。人和的分值在不同规则中差别很大。", {"melds": [], "focus": []}],
+ tsubame:["567m 345p 789p 444s 22m", "7m", "对手宣布立直，打出的宣告牌恰好是7万，你立即荣和这张。不是看到别人立直后随便和牌就算。", {"melds": [], "focus": []}],
+ ishisannen:["234p 567s 777m 123m 66p", "7s", "首巡满足条件时宣告两立直，一直等到最后一张活牌，自摸7索。也有两立直后河底荣和的版本。", {"melds": [], "focus": []}],
+ sanrenkou:["333p 444p 555p 678s 11m", "8s", "同一种花色里，三个刻子的数字连着：本例是3筒、4筒、5筒。3筒已碰；与三种花色同数字的三色同刻不同。", {"melds": [{"group": 0, "type": "pon"}], "focus": [0, 1, 2]}],
+ suurenkou:["444m 555m 666m 777m 22p", "2p", "同一花色的四个连续数字各成刻子：4、5、6、7万。4万已碰，2筒单骑荣和。", {"melds": [{"group": 0, "type": "pon"}], "focus": [0, 1, 2, 3]}],
+ isshoku3:["234m 234m 234m 678p 99s", "8p", "门清，三组顺子花色与数字完全相同：本例三组234万。采用时是否允许副露、怎么与一杯口算，依规则。", {"melds": [], "focus": [0, 1, 2]}],
+ isshoku4:["567s 567s 567s 567s 11p", "1p", "门清，四组完全一样的顺子：本例四组567索。四枚5、6、7索都要收齐；有些版本也允许副露。", {"melds": [], "focus": [0, 1, 2, 3]}],
+ wumensai:["123m 456p 789s 111z 55z", "3m", "万、筒、索、风牌、三元牌五类全出现。本例东刻子与白对子，加上三种数牌；不是要求五组都副露。", {"melds": [], "focus": []}],
+ sanpuukou:["111z 222z 444z 234p 66s", "4p", "三种不同风牌各成刻子，本例东、南、北都已碰。雀头是6索；若第四种风作雀头，则还符合小四喜牌形。", {"melds": [{"group": 0, "type": "pon"}, {"group": 1, "type": "pon"}, {"group": 2, "type": "pon"}], "focus": [0, 1, 2]}],
+ daisharin:["22p 33p 44p 55p 66p 77p 88p", "8p", "门清，2～8筒各一对，8筒单骑荣和。采用时通常作为特殊大役；不采用时仍可按普通成立的役判断。", {"melds": [], "focus": [0, 1, 2, 3, 4, 5, 6]}],
+ daichikurin:["22s 33s 44s 55s 66s 77s 88s", "8s", "门清，2～8索各一对。与大车轮相同的排列，改用索子；不要把1或9也放进来。", {"melds": [], "focus": [0, 1, 2, 3, 4, 5, 6]}],
+ daisuurin:["22m 33m 44m 55m 66m 77m 88m", "8m", "门清，2～8万各一对。与大车轮、大竹林分别使用筒、索不同，这里只用万子。", {"melds": [], "focus": [0, 1, 2, 3, 4, 5, 6]}],
+ shiiaru:["234m 567p 888s 333z 11s", "1s", "四组都已吃碰，手里只留一张1索等对子。本例吃234万、567筒，碰8索和西，再荣和1索；暗杠能否算一组依版本。", {"melds": [{"group": 0, "type": "chi"}, {"group": 1, "type": "chi"}, {"group": 2, "type": "pon"}, {"group": 3, "type": "pon"}], "focus": [0, 1, 2, 3]}],
+ iipin:["123p 789m 456s 666m 22z", "1p", "最后一张活牌刚好摸到1筒，并用它自摸和牌。比普通海底摸月多了“必须是1筒”的条件。", {"melds": [], "focus": []}],
+ chuupin:["789p 345m 234s 555m 77z", "9p", "最后一次通常舍出的牌正好是9筒，你荣和这张。比普通河底捞鱼多了“必须是9筒”的条件。", {"melds": [], "focus": []}],
+ uupin:["7777m 345p 123s 678s 99p", "5p", "7万暗杠后，岭上补牌摸到5筒，并自摸和牌。比普通岭上开花多了“补牌必须是5筒”的条件。", {"melds": [{"group": 0, "type": "ankan"}], "focus": []}],
+ ryansou:["234s 678m 456p 999p 11m", "2s", "对手给2索加杠，你抢这张2索荣和。比普通抢杠多了“必须抢到2索”的条件。", {"melds": [], "focus": []}],
 };
 const HONOR_YAKU = [
- ['dragonWhite','役牌 · 白',1,1,'三元牌白的刻子或杠子，1番。只有白对子不成立。'],
- ['dragonGreen','役牌 · 发',1,1,'三元牌发的刻子或杠子，1番。只有发对子不成立。'],
- ['dragonRed','役牌 · 中',1,1,'三元牌中的刻子或杠子，1番。只有中对子不成立。'],
+ ['dragonWhite','役牌 · 白（发、中）',1,1,'白、发、中任意一种凑成刻子或杠子，各算1番；只有对子不成立。三种牌各自独立计番，不受自风、场风影响。'],
  ['seatWind','役牌 · 自风（席风）',1,1,'本局自己的座位风刻子或杠子，1番。自风随庄家轮转变化。'],
  ['roundWind','役牌 · 场风',1,1,'本场对应风牌的刻子或杠子，1番；东场是东，南场是南。'],
  ['doubleWind','役牌 · 连风（双风）',2,2,'同一种风同时为自风和场风；刻子或杠子计自风1番＋场风1番，共2番。']
+];
+// Display-only historical/local rules: never added to Y, Z or calculator selections.
+const ANCIENT_YAKU = [
+ [
+  "renhou",
+  "人和",
+  "闲家在第一次摸牌前就荣和3筒，之前无人吃碰杠。人和的分值在不同规则中差别很大。"
+ ],
+ [
+  "tsubame",
+  "燕返",
+  "对手宣布立直，打出的宣告牌恰好是7万，你立即荣和这张。不是看到别人立直后随便和牌就算。"
+ ],
+ [
+  "ishisannen",
+  "石上三年",
+  "首巡满足条件时宣告两立直，一直等到最后一张活牌，自摸7索。也有两立直后河底荣和的版本。"
+ ],
+ [
+  "sanrenkou",
+  "三连刻",
+  "同一种花色里，三个刻子的数字连着：本例是3筒、4筒、5筒。3筒已碰；与三种花色同数字的三色同刻不同。"
+ ],
+ [
+  "suurenkou",
+  "四连刻",
+  "同一花色的四个连续数字各成刻子：4、5、6、7万。4万已碰，2筒单骑荣和。"
+ ],
+ [
+  "isshoku3",
+  "一色三同顺（一色三顺）",
+  "门清，三组顺子花色与数字完全相同：本例三组234万。采用时是否允许副露、怎么与一杯口算，依规则。"
+ ],
+ [
+  "isshoku4",
+  "一色四同顺（一色四顺）",
+  "门清，四组完全一样的顺子：本例四组567索。四枚5、6、7索都要收齐；有些版本也允许副露。"
+ ],
+ [
+  "wumensai",
+  "五门齐",
+  "万、筒、索、风牌、三元牌五类全出现。本例东刻子与白对子，加上三种数牌；不是要求五组都副露。"
+ ],
+ [
+  "sanpuukou",
+  "三风刻",
+  "三种不同风牌各成刻子，本例东、南、北都已碰。雀头是6索；若第四种风作雀头，则还符合小四喜牌形。"
+ ],
+ [
+  "daisharin",
+  "大车轮",
+  "门清，2～8筒各一对，8筒单骑荣和。采用时通常作为特殊大役；不采用时仍可按普通成立的役判断。"
+ ],
+ [
+  "daichikurin",
+  "大竹林",
+  "门清，2～8索各一对。与大车轮相同的排列，改用索子；不要把1或9也放进来。"
+ ],
+ [
+  "daisuurin",
+  "大数邻",
+  "门清，2～8万各一对。与大车轮、大竹林分别使用筒、索不同，这里只用万子。"
+ ],
+ [
+  "shiiaru",
+  "十二落抬（四副露单骑）",
+  "四组都已吃碰，手里只留一张1索等对子。本例吃234万、567筒，碰8索和西，再荣和1索；暗杠能否算一组依版本。"
+ ],
+ [
+  "iipin",
+  "一筒摸月（一筒捞月）",
+  "最后一张活牌刚好摸到1筒，并用它自摸和牌。比普通海底摸月多了“必须是1筒”的条件。"
+ ],
+ [
+  "chuupin",
+  "九筒捞鱼",
+  "最后一次通常舍出的牌正好是9筒，你荣和这张。比普通河底捞鱼多了“必须是9筒”的条件。"
+ ],
+ [
+  "uupin",
+  "五筒开花",
+  "7万暗杠后，岭上补牌摸到5筒，并自摸和牌。比普通岭上开花多了“补牌必须是5筒”的条件。"
+ ],
+ [
+  "ryansou",
+  "二索抢杠",
+  "对手给2索加杠，你抢这张2索荣和。比普通抢杠多了“必须抢到2索”的条件。"
+ ]
 ];
 const GLOSSARY = [
  [
@@ -340,9 +441,9 @@ function exampleHTML(id){
 }
 function renderYaku(){
  const q=v('yakuSearch').toLowerCase().trim();
- const arr=Y.concat(HONOR_YAKU).map(y=>({id:y[0],name:y[1],h:y[2],oh:y[3],desc:y[5]||y[4],kind:'normal'})).concat(Z.map(z=>({id:z[0],name:z[1],h:13,desc:z[2],kind:'yakuman',oh:-1})));
- const result=arr.filter(y=>((y.name+y.desc+YAKU_EXAMPLES[y.id][2]).toLowerCase().includes(q))&&(yakuFilter==='all'||yakuFilter==='yakuman'&&y.kind==='yakuman'||y.kind==='normal'&&(yakuFilter==='1'&&y.h===1||yakuFilter==='2'&&y.h===2||yakuFilter==='3'&&y.h>=3)));
- $('yakuCards').innerHTML=result.length?result.map(y=>'<article class="yaku-card"><b>'+y.name+'</b> <span class="badge">'+(y.kind==='yakuman'?'役满':y.h+'番'+(y.oh===-1?' · 门清限定':y.oh<y.h?' / 副露'+y.oh+'番':''))+'</span><p>'+y.desc+'</p>'+exampleHTML(y.id)+'</article>').join(''):'<p class="sm">没有找到匹配役种。</p>';
+ const arr=Y.concat(HONOR_YAKU).map(y=>({id:y[0],name:y[1],h:y[2],oh:y[3],desc:y[5]||y[4],kind:'normal'})).concat(Z.map(z=>({id:z[0],name:z[1],h:13,desc:z[2],kind:'yakuman',oh:-1}))).concat(ANCIENT_YAKU.map(a=>({id:a[0],name:a[1],desc:a[2],kind:'ancient'})));
+ const result=arr.filter(y=>((y.name+y.desc+YAKU_EXAMPLES[y.id][2]).toLowerCase().includes(q))&&(yakuFilter==='all'||yakuFilter==='ancient'&&y.kind==='ancient'||yakuFilter==='yakuman'&&y.kind==='yakuman'||y.kind==='normal'&&(yakuFilter==='1'&&y.h===1||yakuFilter==='2'&&y.h===2||yakuFilter==='3'&&y.h>=3)));
+ $('yakuCards').innerHTML=result.length?result.map(y=>'<article class="yaku-card"><b>'+y.name+'</b> <span class="badge">'+(y.kind==='ancient'?'古役 · 未启用':y.kind==='yakuman'?'役满':y.h+'番'+(y.oh===-1?' · 门清限定':y.oh<y.h?' / 副露'+y.oh+'番':''))+'</span><p>'+y.desc+'</p>'+(y.kind==='ancient'?'<p class="ancient-note">仅供了解：本工具不按古役加番或计役满。采用条件、番数及复合规则以另行约定为准。</p>':'')+exampleHTML(y.id)+'</article>').join(''):'<p class="sm">没有找到匹配役种。</p>';
 }
 function renderGlossary(){
  const query=v('termSearch').trim().toLowerCase(),category=v('termCategory');let count=0;
