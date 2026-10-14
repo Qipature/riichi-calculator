@@ -93,3 +93,16 @@ assert.ok(data.ANCIENT_YAKU.every(a=>a[3].label&&a[3].rank>0),'Every ancient yak
 assert.equal(catalogue.at(-1).id,'daichisei');
 assert.equal(catalogue.find(y=>y.id==='daichisei').label,'双倍役满');
 assert.equal(catalogue.find(y=>y.id==='paarenchan').label,'役满');
+
+// A grid must stay hidden when a filter hides its container (UA [hidden] is weaker).
+assert.match(html,/\[hidden\][^{]*\{display:none!important\}/,'Hidden attribute wins over grid display');
+const nodes={yakuCards:{innerHTML:''},yakuDraws:{},ancientNotice:{},yakuSearch:{value:''}};
+context.document.getElementById=id=>nodes[id];
+context.renderDraws=()=>{};
+for(const filter of ['all','1','2','3','yakuman','draws','ancient','draws','all']){
+ vm.runInContext(`yakuFilter='${filter}';renderYaku()`,context);
+ assert.equal(nodes.yakuCards.hidden,filter==='draws','Cards visibility: '+filter);
+ assert.equal(nodes.yakuDraws.hidden,filter!=='draws','Draw visibility: '+filter);
+ assert.equal(nodes.ancientNotice.hidden,filter!=='ancient','Ancient notice only in ancient filter: '+filter);
+}
+console.log('Passed: guide filter visibility and scoped ancient notice.');
