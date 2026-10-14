@@ -42,9 +42,12 @@ main{max-width:1080px;padding:18px 14px 60px;margin:auto}.panel[hidden],.hide{di
 .wall-summary span{padding:7px 10px;background:#edf7f1;color:#28674f;border-radius:9px;font-size:12px;font-weight:700}
 @media(max-width:560px){.wall-answer strong{font-size:20px}.seat-layout{grid-template-rows:58px 100px 58px}.wall-stack{height:49px;min-width:13px;font-size:10px}.wall-stack.breakpoint{margin-left:12px}.wall-stack.breakpoint:after{height:40px}.wall-stack.breakpoint:before{top:-19px}.wall-scale{font-size:10px}}
 @media(max-width:360px){.dice-quick button{min-width:38px;width:calc((100% - 35px)/6)}.wall-stack{min-width:12px}.wall-answer strong{font-size:18px}}
+
+/* Beginner examples and glossary: use the same tile language as the hand editor. */
+.yaku-cards>*{min-width:0}.yaku-example{border-top:1px solid #dce9e1;margin-top:10px;padding-top:10px}.example-caption{font-size:12px;font-weight:750;color:#305c4a;margin-bottom:8px}.example-caption span{display:block;font-weight:400;color:#6b7563}.example-hand{display:flex;flex-wrap:wrap;gap:8px;align-items:center}.example-group{display:inline-flex;gap:2px;flex-wrap:wrap;max-width:100%}.example-hand .tile{min-width:27px;height:39px;padding:3px;font-size:12px}.example-hand .winning{border:2px solid #b87718;border-bottom:4px solid #b87718;background:#fff3d5}.yaku-example p{margin-top:9px}.term-section>h3{margin-top:25px}.term-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.term-card{background:#f7faf8;border:1px solid #e0ebe5;border-radius:12px;padding:14px}.term-card h4{margin:0 0 7px;color:#19473b;font-size:15px}.term-card p{margin:0;font-size:14px;color:#536b62}.inline-tip .btn{margin-top:8px;display:block}@media(max-width:760px){.term-grid{grid-template-columns:1fr}}
 </style></head><body>
 <header><div class="wrap"><div class="eyebrow">RIICHI MAHJONG TOOLKIT</div><h1>🀄 雀点 · 日麻线下工具箱</h1><p>从川麻切换到立直麻将：算番符、查役种、看向听、快速开桌。</p><div class="tagline"><span>📱 手机适配</span><span>🧮 番符结算</span><span>📖 规则速查</span><span>🌐 首次联网后可离线使用*</span></div></div></header>
-<nav><div class="tabs" role="tablist" aria-label="工具栏目"><button class="tab" data-tab="calc" role="tab" aria-selected="true">🧮 番符计算</button><button class="tab" data-tab="shanten" role="tab" aria-selected="false">🀄 向听分析</button><button class="tab" data-tab="rules" role="tab" aria-selected="false">📖 规则教程</button><button class="tab" data-tab="yaku" role="tab" aria-selected="false">🏅 役种图鉴</button><button class="tab" data-tab="table" role="tab" aria-selected="false">📊 点数速查</button><button class="tab" data-tab="tools" role="tab" aria-selected="false">🎲 牌桌工具</button></div></nav>
+<nav><div class="tabs" role="tablist" aria-label="工具栏目"><button class="tab" data-tab="calc" role="tab" aria-selected="true">🧮 番符计算</button><button class="tab" data-tab="shanten" role="tab" aria-selected="false">🀄 向听分析</button><button class="tab" data-tab="rules" role="tab" aria-selected="false">📖 规则教程</button><button class="tab" data-tab="terms" role="tab" aria-selected="false">📚 麻将术语</button><button class="tab" data-tab="yaku" role="tab" aria-selected="false">🏅 役种图鉴</button><button class="tab" data-tab="table" role="tab" aria-selected="false">📊 点数速查</button><button class="tab" data-tab="tools" role="tab" aria-selected="false">🎲 牌桌工具</button></div></nav>
 <main>
 <section id="tab-calc" class="panel"><div class="split"><div>
 <div class="card"><h2>① 输入方式</h2><div class="two-btn"><button type="button" data-mode="yaku" class="active">按役种 + 符数细算</button><button type="button" data-mode="manual">已知番符，直接结算</button></div><p class="sub" style="margin-top:10px">推荐新手选左侧；已经算出番符的直接选右侧。</p>
@@ -53,10 +56,10 @@ main{max-width:1080px;padding:18px 14px 60px;margin:auto}.panel[hidden],.hide{di
 <div class="card" id="yaku-mode"><h2>② 役种和宝牌</h2><div class="grid"><label class="field">门清状态<select id="closed"><option value="1">门清（未吃碰明杠）</option><option value="0">已副露</option></select></label><label class="field">特殊牌型<select id="special"><option value="normal">普通牌型</option><option value="chiitoi">七对子 · 25符</option><option value="pinfu">平和 · 20/30符</option></select></label><label class="field">场风<select id="roundWind"><option value="E">东场</option><option value="S">南场</option><option value="W">西场</option><option value="N">北场</option></select></label><label class="field">自风<select id="seatWind"><option value="E">东</option><option value="S">南</option><option value="W">西</option><option value="N">北</option></select></label></div>
 <h3>常见役种 <span class="sm">根据副露状态自动减番</span></h3><div id="yakuChecks"></div>
 <h3>役牌刻子 / 杠 <span class="sm">打勾后计算役牌番数</span></h3><div class="checks" id="honorChecks"></div>
-<h3>宝牌张数</h3><div class="grid3"><label class="field">表宝牌 + 杠宝牌<input id="dora" type="number" min="0" max="30" value="0"></label><label class="field">赤宝牌<input id="red" type="number" min="0" max="4" value="0"></label><label class="field">里宝牌（立直后）<input id="ura" type="number" min="0" max="30" value="0"></label></div><p class="sm">宝牌不是役，必须有其他和牌役。役牌及一杯口等仍需根据实际牌姿自行确认。</p>
+<p class="inline-tip">三元牌（白、发、中）各1番；自风、场风各1番；同一种风两者兼有为连风，共2番，只勾一次。客风刻子0番，对子不是役牌。<button class="btn secondary" type="button" data-goto="yaku">查看役牌牌例</button></p><h3>宝牌张数</h3><div class="grid3"><label class="field">表宝牌 + 杠宝牌<input id="dora" type="number" min="0" max="30" value="0"></label><label class="field">赤宝牌<input id="red" type="number" min="0" max="4" value="0"></label><label class="field">里宝牌（立直后）<input id="ura" type="number" min="0" max="30" value="0"></label></div><p class="sm">宝牌不是役，必须有其他和牌役。役牌及一杯口等仍需根据实际牌姿自行确认。</p>
 <hr class="divider"><h3>役满（若成立，按役满优先结算）</h3><div class="checks" id="yakumanChecks"></div>
 </div>
-<div class="card" id="fu-mode"><h2>③ 符数细算</h2><div class="grid"><label class="field">雀头<select id="headFu"><option value="0">普通雀头 · 0符</option><option value="2">役牌（白发中 / 场风 / 自风）· 2符</option><option value="4">连风雀头（场风=自风）· 4符</option></select></label><label class="field">听牌形状<select id="waitFu"><option value="0">两面 / 双碰 · 0符</option><option value="2">边张 / 嵌张 / 单骑 · 2符</option></select></label></div><h3>刻子 / 杠子数量 <span class="sm">顺子不用填</span></h3><div id="melds"></div><p class="sm">基础20符；门清荣和+10、自摸通常+2。荣和补成的刻子按明刻计算。七对子和平和的符数按特殊规则处理。</p></div>
+<div class="card" id="fu-mode"><h2>③ 符数细算</h2><div class="grid"><label class="field">雀头<select id="headFu"><option value="0">普通雀头 · 0符</option><option value="2">役牌（白发中 / 场风 / 自风）· 2符</option><option value="4">连风雀头 · 常见4符（WRC选2符）</option></select></label><label class="field">听牌形状<select id="waitFu"><option value="0">两面 / 双碰 · 0符</option><option value="2">边张 / 嵌张 / 单骑 · 2符</option></select></label></div><h3>刻子 / 杠子数量 <span class="sm">顺子不用填</span></h3><div id="melds"></div><p class="sm">基础20符；门清荣和+10、自摸通常+2。荣和补成的刻子按明刻计算。七对子和平和的符数按特殊规则处理。</p></div>
 <div class="card hide" id="manual-mode"><h2>② 已知番符直接结算</h2><div class="grid"><label class="field">番数<input id="manualHan" type="number" min="1" max="99" value="3"></label><label class="field">符数<select id="manualFu"><option>20</option><option>25</option><option selected>30</option><option>40</option><option>50</option><option>60</option><option>70</option><option>80</option><option>90</option><option>100</option><option>110</option></select></label><label class="field">役满倍数（0=按番符）<input id="manualYakuman" type="number" min="0" max="6" value="0"></label></div><p class="sm">这里默认你已经确认和牌合法、役种成立。役满倍数填写1、2、3等，可直接计算对应点数。</p></div>
 <div class="card"><h2>④ 可选规则</h2><div class="checks"><label class="check"><input type="checkbox" id="kiriage">切上满贯（3番60符 / 4番30符）</label><label class="check"><input type="checkbox" id="kazoeCap">13番以上按三倍满封顶（非累计役满）</label><label class="check"><input type="checkbox" id="doubleYakuman" checked>四暗刻单骑等双倍役满规则</label><label class="check"><input type="checkbox" id="kuitan" checked>允许副露断幺九（食断）</label></div><hr class="divider"><div class="btnrow"><button id="resetCalc" class="btn secondary" type="button">↺ 重置计算</button><button id="copyResult" class="btn ghost" type="button">📋 复制本局结果</button></div></div>
 </div>
@@ -80,7 +83,9 @@ main{max-width:1080px;padding:18px 14px 60px;margin:auto}.panel[hidden],.hide{di
 <details><summary>12 · 推荐给川麻玩家的起手策略</summary><p>新手前几局尽量<b>先保持门清</b>，优先找立直、断幺九、役牌、门清自摸等简单役；不熟悉役时别随便吃碰。注意东南西北/白发中既可能是役牌刻子，也可能只是普通字牌；听牌后先检查振听。</p></details>
 </div></div></section>
 
-<section id="tab-yaku" class="panel" hidden><div class="card"><h2>🏅 役种图鉴</h2><p class="sub">可搜索中文名称或关键词。图鉴覆盖常见一般役与役满；所示番数采用常见食断、食下规则。</p><label class="field" style="max-width:430px">搜索役名或说明<input id="yakuSearch" type="search" placeholder="例如：立直、染手、役牌、混一色"></label><div class="btnrow" id="yakuFilters" style="margin:12px 0"><button class="btn secondary" data-yfilter="all">全部</button><button class="btn ghost" data-yfilter="1">1番</button><button class="btn ghost" data-yfilter="2">2番</button><button class="btn ghost" data-yfilter="3">3番以上</button><button class="btn ghost" data-yfilter="yakuman">役满</button></div><div class="yaku-cards" id="yakuCards"></div></div></section>
+<section id="tab-terms" class="panel" hidden><div class="card"><h2>📚 麻将术语辞典</h2><p class="sub">从牌的名称到对局流程，先懂术语，再读规则。支持搜索别名、说明与例子。</p><div class="grid"><label class="field">搜索术语或说明<input id="termSearch" type="search" placeholder="例如：门清、筋牌、半庄、连庄、振听"></label><label class="field">分类<select id="termCategory"></select></label></div><p class="sm" id="termCount" role="status" aria-live="polite"></p><div class="inline-tip">新手先看「牌与组合」「行动与门清」「振听规则」。场次、加赛、双倍役满等细节以本桌约定为准。<button class="btn secondary" type="button" data-goto="yaku">看役种牌例</button></div><div id="termCards"></div><p class="sm">规则参考：<a href="https://ooyamaneko.net/download/mahjong/riichi/WRC_Rules_2025_en.pdf" target="_blank" rel="noopener">WRC 2025</a>（其中连风雀头采用2符、暂时振听可在自己摸牌或鸣牌时解除）；本文另列常见桌规差异。</p></div></section>
+
+<section id="tab-yaku" class="panel" hidden><div class="card"><h2>🏅 役种图鉴</h2><p class="sub">可搜索中文名称或关键词。每个役都有完整牌例与成立条件。金色边框标出和牌张，各组间留空区分面子或对子；国士与九莲按特殊牌形展示。牌例可同时包含其他役，所列番数仅属于本役；杠多出一张仍算一面子。采用常见食断、食下规则。</p><label class="field" style="max-width:430px">搜索役名或说明<input id="yakuSearch" type="search" placeholder="例如：立直、染手、役牌、混一色"></label><div class="btnrow" id="yakuFilters" style="margin:12px 0"><button class="btn secondary" data-yfilter="all">全部</button><button class="btn ghost" data-yfilter="1">1番</button><button class="btn ghost" data-yfilter="2">2番</button><button class="btn ghost" data-yfilter="3">3番以上</button><button class="btn ghost" data-yfilter="yakuman">役满</button></div><div class="yaku-cards" id="yakuCards"></div></div></section>
 
 <section id="tab-table" class="panel" hidden><div class="card"><h2>📊 点数速查表</h2><p class="sub">根据庄闲及荣和/自摸显示 <b>1～4番</b> 的标准点数（不含本场及供托），满贯以上另有说明。</p><div class="grid" style="max-width:600px"><label class="field">身份<select id="tableDealer"><option value="0">闲家</option><option value="1">庄家</option></select></label><label class="field">方式<select id="tableWin"><option value="ron">荣和</option><option value="tsumo">自摸</option></select></label></div><div class="table-wrap" id="scoreTable" style="margin-top:15px"></div><p class="sm">自摸表格中的「庄 / 闲」是庄家支付 / 每个闲家支付，庄家自摸显示每家支付数。20符主要用于平和自摸；25符用于七对子，部分1番/20符组合实际不可能成立。</p><h3>番数封顶参考（无本场）</h3><div class="grid3" id="limitCards"></div></div></section>
 
@@ -198,7 +203,6 @@ const Y=[
 ['houtei','河底捞鱼',1,1,'一番役','荣和最后一张通常舍牌。'],
 ['rinshan','岭上开花',1,1,'一番役','杠后岭上补牌自摸和牌。'],
 ['chankan','抢杠',1,1,'一番役','对手加杠时符合条件的荣和。'],
-['yakuhaiExtra','役牌（补充）',1,1,'一番役','仅用于特殊确认情形；通常应使用下方白发中及自风/场风刻子勾选。'],
 ['chiitoi','七对子',2,-1,'二番役','七个不同的对子，固定25符。'],
 ['sanshoku','三色同顺',2,1,'二番役','万、筒、索各有一组数字相同的顺子。'],
 ['ittsuu','一气通贯',2,1,'二番役','同一种花色具有123、456、789三组顺子。'],
@@ -238,6 +242,7 @@ const TILE_SHORT=Array.from({length:34},(_,i)=>i<27?(i%9+1)+(i<9?'m':i<18?'p':'s
 const meldCount=Array(8).fill(0),hand=Array(34).fill(0),history=[];
 let mode='yaku',latestText='',yakuFilter='all';
 function setup(){
+ setupLearning();
  const groups=[['一番役',Y.filter(y=>y[4]==='一番役')],['二番役',Y.filter(y=>y[4]==='二番役')],['三番及以上',Y.filter(y=>!['一番役','二番役'].includes(y[4]))]];
  $('yakuChecks').innerHTML=groups.map(g=>'<h3>'+g[0]+'</h3><div class="checks">'+g[1].map(y=>'<label class="check"><input class="yakuCb" type="checkbox" value="'+y[0]+'">'+y[1]+' <small>'+y[2]+'番'+(y[3]===-1?' · 门清':y[3]<y[2]?' · 副露'+y[3]:'')+'</small></label>').join('')+'</div>').join('');
  $('honorChecks').innerHTML=[['white','白'],['green','发'],['redDragon','中'],['E','东'],['S','南'],['W','西'],['N','北']].map(x=>'<label class="check"><input type="checkbox" class="honorCb" value="'+x[0]+'">'+x[1]+'刻子/杠</label>').join('');
@@ -268,6 +273,8 @@ function setup(){
  $('copyWall').addEventListener('click',async()=>{try{await navigator.clipboard.writeText(wallBreakText(Number(v('diceTotalSelect'))));$('copyWall').textContent='✓ 已复制';setTimeout(()=>$('copyWall').textContent='📋 复制开门位置',1800);}catch(e){$('copyWall').textContent='复制失败，可截图保存';}});
 
  calc();renderHand();renderYaku();renderTable();renderLimits();setDiceTotal(6);
+ if(location.hash)activate(location.hash.slice(1));
+ window.addEventListener('hashchange',()=>activate(location.hash.slice(1)||'calc'));
  try{if('serviceWorker'in navigator)navigator.serviceWorker.register('./sw.js').catch(()=>{});}catch(e){}
 }
 
@@ -325,9 +332,10 @@ function renderWallBreak(total){
  document.querySelectorAll('#diceQuick button').forEach(btn=>{const active=Number(btn.dataset.total)===w.total;btn.classList.toggle('active',active);btn.setAttribute('aria-pressed',String(active));});
 }
 
-function activate(tab){document.querySelectorAll('.panel').forEach(el=>el.hidden=(el.id!=='tab-'+tab));document.querySelectorAll('.tab').forEach(el=>el.setAttribute('aria-selected',String(el.dataset.tab===tab)));window.scrollTo(0,0);}
+function activate(tab){if(!document.getElementById('tab-'+tab))return;document.querySelectorAll('.panel').forEach(el=>el.hidden=(el.id!=='tab-'+tab));document.querySelectorAll('.tab').forEach(el=>el.setAttribute('aria-selected',String(el.dataset.tab===tab)));window.history.replaceState(null,'','#'+tab);window.scrollTo(0,0);}
 function namesChecked(cls){return Array.from(document.querySelectorAll('.'+cls+':checked')).map(e=>e.value);}
 function calc(){
+ updateHonorLabels();
  let closed=v('closed')==='1',tsumo=v('win')==='tsumo',dealer=v('dealer')==='1',warnings=[],notes=[],han=0,fu=30,yakuman=0,yakuHan=0;
  const spec=v('special'),sel=namesChecked('yakuCb'),honors=namesChecked('honorCb'),kanCount=meldCount.reduce((a,b)=>a+b,0);
  if(mode==='manual'){han=n('manualHan');fu=n('manualFu');yakuman=n('manualYakuman');if(!yakuman&&han<1)warnings.push('需要至少1番才能计算');if(!yakuman&&fu===20&&!tsumo)warnings.push('20符荣和不成立，请检查输入');if(!yakuman&&fu===25&&han===1)warnings.push('七对子固定2番，1番25符不是标准和牌组合');notes.push('使用手动输入的番符，不自动核对役种成立条件');}
@@ -405,11 +413,6 @@ function renderHand(){
  if(r.min===-1)text+='<div class="inline-tip" style="margin-top:12px">牌形已完成，但仍需确认有役、无振听，并满足门清/副露等条件。</div>';
  $('shantenResult').innerHTML=text;
 }
-function renderYaku(){
- const q=v('yakuSearch').toLowerCase().trim(),arr=Y.map(y=>({name:y[1],h:y[2],oh:y[3],desc:y[5],kind:'normal'})).concat(Z.map(z=>({name:z[1],h:13,desc:z[2],kind:'yakuman',oh:-1})));
- const result=arr.filter(y=>((y.name+y.desc).toLowerCase().includes(q))&&(yakuFilter==='all'||yakuFilter==='yakuman'&&y.kind==='yakuman'||y.kind==='normal'&&(yakuFilter==='1'&&y.h===1||yakuFilter==='2'&&y.h===2||yakuFilter==='3'&&y.h>=3)));
- $('yakuCards').innerHTML=result.length?result.map(y=>'<div class="yaku-card"><b>'+y.name+'</b> <span class="badge">'+(y.kind==='yakuman'?'役满':y.h+'番'+(y.oh===-1?' · 门清限定':y.oh<y.h?' / 副露'+y.oh+'番':''))+'</span><p>'+y.desc+'</p></div>').join(''):'<p class="sm">没有找到匹配役种。</p>';
-}
 function renderTable(){
  const dealer=v('tableDealer')==='1',tsumo=v('tableWin')==='tsumo',fus=[20,25,30,40,50,60,70,80,90,100,110];
  let t='<table class="score-table"><thead><tr><th>符数＼番数</th><th>1番</th><th>2番</th><th>3番</th><th>4番</th></tr></thead><tbody>';
@@ -419,4 +422,4 @@ function renderLimits(){
  $('limitCards').innerHTML=[[5,'满贯'],[6,'跳满'],[8,'倍满'],[11,'三倍满'],[13,'累计役满']].map(x=>{let r=scorePoints({han:x[0],fu:30,dealer:false,tsumo:false});return '<div class="metric"><span class="sm">'+x[0]+(x[0]===5?'番':'+番')+' · '+x[1]+'</span><strong>'+money(r.normal)+'</strong><span class="sm">闲家荣和点数</span></div>'}).join('');
 }
 document.addEventListener('DOMContentLoaded',setup);
-</script></body></html>
+</script><script src="./learning.js"></script></body></html>
