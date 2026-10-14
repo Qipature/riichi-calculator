@@ -9,6 +9,7 @@ vm.createContext(context);
 vm.runInContext(html.match(/<script>([\s\S]*?)<\/script>/)[1], context);
 vm.runInContext(fs.readFileSync(path.join(root, 'learning.js'), 'utf8'), context);
 const data = JSON.parse(vm.runInContext('JSON.stringify({Y,Z,HONOR_YAKU,YAKU_EXAMPLES,GLOSSARY})', context));
+const uniqueHands = new Set();
 for (const yaku of [...data.Y, ...data.Z, ...data.HONOR_YAKU]) {
  const example = data.YAKU_EXAMPLES[yaku[0]];
  assert.ok(example, `Missing example: ${yaku[0]}`);
@@ -23,6 +24,9 @@ for (const yaku of [...data.Y, ...data.Z, ...data.HONOR_YAKU]) {
   }
  }
  assert.ok(counts.every(n => n <= 4), `More than four copies: ${yaku[0]}`);
+ const signature = counts.join(',');
+ assert.ok(!uniqueHands.has(signature), `Duplicate hand: ${yaku[0]}`);
+ uniqueHands.add(signature);
  assert.equal(counts.reduce((a,b) => a+b, 0), 14 + quads, `Tile count: ${yaku[0]}`);
  const winningIndex = vm.runInContext(`exampleTileIndex('${win}')`, context);
  assert.ok(counts[winningIndex], `Winning tile not in hand: ${yaku[0]}`);
@@ -43,11 +47,36 @@ for (const yaku of [...data.Y, ...data.Z, ...data.HONOR_YAKU]) {
  if (['kokushi13', 'junseiChuuren'].includes(yaku[0])) {
   counts[winningIndex]--;
   if (yaku[0] === 'kokushi13') assert.equal(counts.filter(n => n === 1).length, 13);
-  else assert.deepEqual(counts.slice(0,9), [3,1,1,1,1,1,1,1,3]);
+  else {
+   const suitStart = Math.floor(winningIndex / 9) * 9;
+   assert.deepEqual(counts.slice(suitStart,suitStart+9), [3,1,1,1,1,1,1,1,3]);
+  }
  }
+ const split = JSON.parse(vm.runInContext(`JSON.stringify(splitExample('${yaku[0]}'))`, context));
+ const displayedCounts = Array(34).fill(0);
+ for (const code of split.groups.flat().concat(split.win)) {
+  displayedCounts[vm.runInContext(`exampleTileIndex('${code}')`, context)]++;
+ }
+ const fullCounts = normalCounts.slice();
+ for (const group of shape.split(' ')) if (group.length === 5 && new Set(group.slice(0,-1)).size === 1) {
+  fullCounts[vm.runInContext(`exampleTileIndex('${group[0] + group.at(-1)}')`, context)]++;
+ }
+ assert.deepEqual(displayedCounts, fullCounts, `Moving winning tile must preserve hand: ${yaku[0]}`);
+ for (const meld of split.fixed) {
+  const codes = split.groups[meld.group];
+  assert.equal(codes.length, ['ankan','minkan'].includes(meld.type) ? 4 : 3, `Declared meld size: ${yaku[0]}`);
+  if (meld.type !== 'chi') assert.equal(new Set(codes).size, 1, `Declared triplet/quad: ${yaku[0]}`);
+ }
+ const rendered = vm.runInContext(`exampleHTML('${yaku[0]}')`, context);
+ assert.equal((rendered.match(/class="tile art-tile winning"/g)||[]).length, 1, `One separate winning tile: ${yaku[0]}`);
+ assert.ok(rendered.lastIndexOf('winning-zone') > rendered.lastIndexOf('example-hand'), `Winning tile is rightmost zone: ${yaku[0]}`);
 }
 assert.ok(!data.Y.some(y => y[0] === 'yakuhaiExtra'), 'Ambiguous/double-countable extra yakuhai removed');
 assert.equal(data.HONOR_YAKU.length, 6);
 assert.equal(data.GLOSSARY.length, 8);
 assert.ok(fs.readFileSync(path.join(root, 'sw.js'), 'utf8').includes("'./learning.js'"));
+assert.ok(fs.readFileSync(path.join(root, 'sw.js'), 'utf8').includes("'./assets/tiles.svg'"));
+const sprite = fs.readFileSync(path.join(root,'assets/tiles.svg'), 'utf8');
+for(let i=0;i<34;i++) assert.ok(sprite.includes(`id="tile-${i}"`), `Tile art ${i}`);
+assert.ok(data.GLOSSARY.flatMap(g=>g[1]).some(t=>t[0]==='自风（席风）/ 场风 / 客风'));
 console.log(`Passed: ${Object.keys(data.YAKU_EXAMPLES).length} winning examples; ${data.GLOSSARY.reduce((n,g) => n+g[1].length, 0)} glossary entries; offline asset.`);
