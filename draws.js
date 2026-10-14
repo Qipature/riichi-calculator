@@ -40,6 +40,6 @@ const DRAW_EXAMPLES = [
 function drawTilesHTML(shape){
  return shape.split(' ').map(g=>'<span class="draw-group">'+[...g.slice(0,-1)].map((d,j)=>exampleTile(d+g.at(-1),g.length===5&&j===0?'sideways':'')).join('')+'</span>').join('');
 }
-function renderDraws(){
- $('drawCards').innerHTML=DRAW_EXAMPLES.map(d=>'<article class="yaku-card draw-card" data-draw="'+d.id+'"><h3>'+d.name+'</h3><span class="badge">'+d.type+'</span><p>'+d.intro+'</p><div class="draw-scene">'+(d.rows||[]).map(([label,shape])=>'<div class="draw-zone"><div class="zone-title">'+label+'</div><div class="draw-tiles">'+drawTilesHTML(shape)+'</div></div>').join('')+(d.players?'<div class="draw-players">'+d.players.map(([label,shape])=>'<div class="draw-zone"><div class="zone-title">'+label+'</div><div class="draw-tiles">'+drawTilesHTML(shape)+'</div></div>').join('')+'</div>':'')+'<p><b>这个例子发生了什么：</b>'+d.scene+'</p></div><p><b>怎么处理：</b>'+d.result+'</p></article>').join('');
+function renderDraws(query=''){
+ $('drawCards').innerHTML=DRAW_EXAMPLES.filter(d=>(d.name+d.intro+d.scene+d.result).includes(query.trim())).map(d=>'<article class="yaku-card draw-card" data-draw="'+d.id+'"><h3>'+d.name+'</h3><span class="badge">'+d.type+'</span><p>'+d.intro+'</p><div class="draw-scene">'+(d.rows||[]).map(([label,shape])=>'<div class="draw-zone"><div class="zone-title">'+label+'</div><div class="draw-tiles">'+drawTilesHTML(shape)+'</div></div>').join('')+(d.players?'<div class="draw-players">'+d.players.map(([label,shape])=>'<div class="draw-zone"><div class="zone-title">'+label+'</div><div class="draw-tiles">'+drawTilesHTML(shape)+'</div></div>').join('')+'</div>':'')+'<p><b>这个例子发生了什么：</b>'+d.scene+'</p></div><p><b>怎么处理：</b>'+d.result+'</p></article>').join('');
 }

@@ -26,6 +26,6 @@ assert.equal(kans.length,4);
 assert.ok(kans.every(g=>g.length===5&&new Set(g.slice(0,-1)).size===1),'Four complete quads across different players');
 const hand=Array(34).fill(0);for(const code of tiles(find('exhaustive').rows[0][1]))hand[index(code)]++;
 assert.equal(vm.runInContext(`handShanten(${JSON.stringify(hand)}).min`,context),0,'Exhaustive-draw example is tenpai');
-assert.ok(html.includes('id="tab-draws"')&&html.includes('src="./draws.js"'));
+assert.ok(html.includes('id="yakuDraws"')&&html.includes('src="./draws.js"'));
 assert.ok(fs.readFileSync(path.join(root,'sw.js'),'utf8').includes("'./draws.js'"));
 console.log('Passed: 7 draw scenarios, nine distinct terminal types, nagashi river, four winds/kans and offline module.');

@@ -5,6 +5,7 @@ on:
       - index.html
       - learning.js
       - draws.js
+      - tenpai.js
       - assets/**
       - tests/**
       - sw.js
@@ -87,6 +88,7 @@ jobs:
         run: |
           node tests/learning.test.cjs
           node tests/draws.test.cjs
+          node tests/tenpai.test.cjs
       - name: Validate manifest and service worker syntax
         run: |
           node --check sw.js

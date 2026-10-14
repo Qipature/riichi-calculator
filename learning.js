@@ -554,6 +554,7 @@ function yakuCatalogue(){
  return normal.concat(yakuman,ancient).sort((a,b)=>a.rank-b.rank);
 }
 function renderYaku(){
+ const isDraw=yakuFilter==='draws';$('yakuDraws').hidden=!isDraw;$('yakuCards').hidden=isDraw;$('ancientNotice').hidden=isDraw;if(isDraw){renderDraws(v('yakuSearch'));return;}
  const q=v('yakuSearch').toLowerCase().trim();
  const result=yakuCatalogue().filter(y=>((y.name+y.desc+(y.detail||'')+(y.label||'')+YAKU_EXAMPLES[y.id][2]).toLowerCase().includes(q))&&(yakuFilter==='all'||yakuFilter==='ancient'&&y.kind==='ancient'||yakuFilter==='yakuman'&&y.kind==='yakuman'||y.kind==='normal'&&(yakuFilter==='1'&&y.h===1||yakuFilter==='2'&&y.h===2||yakuFilter==='3'&&y.h>=3)));
  $('yakuCards').innerHTML=result.length?result.map(y=>{
