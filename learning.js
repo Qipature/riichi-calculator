@@ -62,6 +62,9 @@ const YAKU_EXAMPLES = {
  chuupin:["789p 345m 234s 555m 77z", "9p", "最后一次通常舍出的牌正好是9筒，你荣和这张。比普通河底捞鱼多了“必须是9筒”的条件。", {"melds": [], "focus": []}],
  uupin:["7777m 345p 123s 678s 99p", "5p", "7万暗杠后，岭上补牌摸到5筒，并自摸和牌。比普通岭上开花多了“补牌必须是5筒”的条件。", {"melds": [{"group": 0, "type": "ankan"}], "focus": []}],
  ryansou:["234s 678m 456p 999p 11m", "2s", "对手给2索加杠，你抢这张2索荣和。比普通抢杠多了“必须抢到2索”的条件。", {"melds": [], "focus": []}],
+ daichisei:["11z 22z 33z 44z 55z 66z 77z", "7z", "门清，七种字牌各成一对；原先中单骑，荣和中。本页采用大七星双倍役满。", {"melds": [], "focus": [0, 1, 2, 3, 4, 5, 6]}],
+ paarenchan:["234m 456p 789s 666p 55s", "9s", "同一玩家连续坐庄，第八局荣和9索。按本页采用的连续坐庄版本，这次合法和牌直接按役满；牌形本身不用是国士、四暗刻等大牌。", {"melds": [], "focus": []}],
+
 };
 const HONOR_YAKU = [
  ['dragonWhite','役牌 · 白（发、中）',1,1,'白、发、中任意一种凑成刻子或杠子，各算1番；只有对子不成立。三种牌各自独立计番，不受自风、场风影响。'],
@@ -74,87 +77,192 @@ const ANCIENT_YAKU = [
  [
   "renhou",
   "人和",
-  "闲家在第一次摸牌前就荣和3筒，之前无人吃碰杠。人和的分值在不同规则中差别很大。"
+  "闲家在第一次摸牌前就荣和3筒，之前无人吃碰杠。人和的分值在不同规则中差别很大。",
+  {
+   "rank": 5,
+   "label": "满贯／倍满／役满",
+   "detail": "常见分值有满贯、倍满与役满；为便于排序，本页按满贯档排列。"
+  }
  ],
  [
   "tsubame",
   "燕返",
-  "对手宣布立直，打出的宣告牌恰好是7万，你立即荣和这张。不是看到别人立直后随便和牌就算。"
+  "对手宣布立直，打出的宣告牌恰好是7万，你立即荣和这张。不是看到别人立直后随便和牌就算。",
+  {
+   "rank": 1,
+   "label": "1番",
+   "detail": ""
+  }
  ],
  [
   "ishisannen",
   "石上三年",
-  "首巡满足条件时宣告两立直，一直等到最后一张活牌，自摸7索。也有两立直后河底荣和的版本。"
+  "首巡满足条件时宣告两立直，一直等到最后一张活牌，自摸7索。也有两立直后河底荣和的版本。",
+  {
+   "rank": 100,
+   "label": "役满",
+   "detail": ""
+  }
  ],
  [
   "sanrenkou",
   "三连刻",
-  "同一种花色里，三个刻子的数字连着：本例是3筒、4筒、5筒。3筒已碰；与三种花色同数字的三色同刻不同。"
+  "同一种花色里，三个刻子的数字连着：本例是3筒、4筒、5筒。3筒已碰；与三种花色同数字的三色同刻不同。",
+  {
+   "rank": 2,
+   "label": "2番",
+   "detail": ""
+  }
  ],
  [
   "suurenkou",
   "四连刻",
-  "同一花色的四个连续数字各成刻子：4、5、6、7万。4万已碰，2筒单骑荣和。"
+  "同一花色的四个连续数字各成刻子：4、5、6、7万。4万已碰，2筒单骑荣和。",
+  {
+   "rank": 100,
+   "label": "役满",
+   "detail": ""
+  }
  ],
  [
   "isshoku3",
   "一色三同顺（一色三顺）",
-  "门清，三组顺子花色与数字完全相同：本例三组234万。采用时是否允许副露、怎么与一杯口算，依规则。"
+  "门清，三组顺子花色与数字完全相同：本例三组234万。采用时是否允许副露、怎么与一杯口算，依规则。",
+  {
+   "rank": 2,
+   "label": "2～3番",
+   "detail": "门清常见2番或3番；允许副露的版本通常减1番，具体是否采用依桌规。"
+  }
  ],
  [
   "isshoku4",
   "一色四同顺（一色四顺）",
-  "门清，四组完全一样的顺子：本例四组567索。四枚5、6、7索都要收齐；有些版本也允许副露。"
+  "门清，四组完全一样的顺子：本例四组567索。四枚5、6、7索都要收齐；有些版本也允许副露。",
+  {
+   "rank": 100,
+   "label": "役满",
+   "detail": ""
+  }
  ],
  [
   "wumensai",
   "五门齐",
-  "万、筒、索、风牌、三元牌五类全出现。本例东刻子与白对子，加上三种数牌；不是要求五组都副露。"
+  "万、筒、索、风牌、三元牌五类全出现。本例东刻子与白对子，加上三种数牌；不是要求五组都副露。",
+  {
+   "rank": 2,
+   "label": "2番",
+   "detail": "此处按常见2番版展示；附加限制更严格的版本也可能计5番或役满。"
+  }
  ],
  [
   "sanpuukou",
   "三风刻",
-  "三种不同风牌各成刻子，本例东、南、北都已碰。雀头是6索；若第四种风作雀头，则还符合小四喜牌形。"
+  "三种不同风牌各成刻子，本例东、南、北都已碰。雀头是6索；若第四种风作雀头，则还符合小四喜牌形。",
+  {
+   "rank": 2,
+   "label": "2番",
+   "detail": ""
+  }
  ],
  [
   "daisharin",
   "大车轮",
-  "门清，2～8筒各一对，8筒单骑荣和。采用时通常作为特殊大役；不采用时仍可按普通成立的役判断。"
+  "门清，2～8筒各一对，8筒单骑荣和。采用时通常作为特殊大役；不采用时仍可按普通成立的役判断。",
+  {
+   "rank": 100,
+   "label": "役满",
+   "detail": ""
+  }
  ],
  [
   "daichikurin",
   "大竹林",
-  "门清，2～8索各一对。与大车轮相同的排列，改用索子；不要把1或9也放进来。"
+  "门清，2～8索各一对。与大车轮相同的排列，改用索子；不要把1或9也放进来。",
+  {
+   "rank": 100,
+   "label": "役满",
+   "detail": ""
+  }
  ],
  [
   "daisuurin",
   "大数邻",
-  "门清，2～8万各一对。与大车轮、大竹林分别使用筒、索不同，这里只用万子。"
+  "门清，2～8万各一对。与大车轮、大竹林分别使用筒、索不同，这里只用万子。",
+  {
+   "rank": 100,
+   "label": "役满",
+   "detail": ""
+  }
  ],
  [
   "shiiaru",
   "十二落抬（四副露单骑）",
-  "四组都已吃碰，手里只留一张1索等对子。本例吃234万、567筒，碰8索和西，再荣和1索；暗杠能否算一组依版本。"
+  "四组都已吃碰，手里只留一张1索等对子。本例吃234万、567筒，碰8索和西，再荣和1索；暗杠能否算一组依版本。",
+  {
+   "rank": 1,
+   "label": "1番",
+   "detail": ""
+  }
  ],
  [
   "iipin",
   "一筒摸月（一筒捞月）",
-  "最后一张活牌刚好摸到1筒，并用它自摸和牌。比普通海底摸月多了“必须是1筒”的条件。"
+  "最后一张活牌刚好摸到1筒，并用它自摸和牌。比普通海底摸月多了“必须是1筒”的条件。",
+  {
+   "rank": 5,
+   "label": "满贯",
+   "detail": "也有在对应普通役基础上额外加1番的版本；此处按满贯版排列。"
+  }
  ],
  [
   "chuupin",
   "九筒捞鱼",
-  "最后一次通常舍出的牌正好是9筒，你荣和这张。比普通河底捞鱼多了“必须是9筒”的条件。"
+  "最后一次通常舍出的牌正好是9筒，你荣和这张。比普通河底捞鱼多了“必须是9筒”的条件。",
+  {
+   "rank": 5,
+   "label": "满贯",
+   "detail": "也有在对应普通役基础上额外加1番的版本；此处按满贯版排列。"
+  }
  ],
  [
   "uupin",
   "五筒开花",
-  "7万暗杠后，岭上补牌摸到5筒，并自摸和牌。比普通岭上开花多了“补牌必须是5筒”的条件。"
+  "7万暗杠后，岭上补牌摸到5筒，并自摸和牌。比普通岭上开花多了“补牌必须是5筒”的条件。",
+  {
+   "rank": 5,
+   "label": "满贯",
+   "detail": "也有在对应普通役基础上额外加1番的版本；此处按满贯版排列。"
+  }
  ],
  [
   "ryansou",
   "二索抢杠",
-  "对手给2索加杠，你抢这张2索荣和。比普通抢杠多了“必须抢到2索”的条件。"
+  "对手给2索加杠，你抢这张2索荣和。比普通抢杠多了“必须抢到2索”的条件。",
+  {
+   "rank": 5,
+   "label": "满贯",
+   "detail": "也有在对应普通役基础上额外加1番的版本；此处按满贯版排列。"
+  }
+ ],
+ [
+  "daichisei",
+  "大七星（字牌七对子）",
+  "东、南、西、北、白、发、中七种字牌各一对，门清。本页按双倍役满介绍。",
+  {
+   "rank": 200,
+   "label": "双倍役满",
+   "detail": ""
+  }
+ ],
+ [
+  "paarenchan",
+  "八连庄",
+  "同一个人连续当庄八局，第八局和牌时，即使只做出简单牌型，也按役满。这里采用你这桌的“连续坐庄”版本。",
+  {
+   "rank": 100,
+   "label": "役满",
+   "detail": "还有要求连续八次和牌的版本；流局是否计入或中断、如何累计次数，开桌前先约定。本场数不能直接当作八连庄次数。"
+  }
  ]
 ];
 const GLOSSARY = [
@@ -439,11 +547,19 @@ function exampleHTML(id){
  const called=fixed.map(m=>groupHTML(groups[m.group],m.group,m)).join('');
  return '<div class="yaku-example"><div class="example-caption">和牌示例 <span>浅绿底为关键牌组；金框为最后和牌张</span></div><div class="example-layout"><div class="example-main"><div class="zone-title">手里的牌（未副露）</div><div class="example-hand">'+closed+'</div>'+(called?'<div class="fixed-zone"><div class="zone-title">摆出的牌组 <span>吃、碰、明杠是副露；暗杠仍门清</span></div><div class="example-hand">'+called+'</div></div>':'')+'</div><div class="winning-zone"><div class="zone-title">和牌张</div>'+exampleTile(win,'winning')+'</div></div><p><b>成立条件：</b>'+note+'</p></div>';
 }
+function yakuCatalogue(){
+ const normal=Y.concat(HONOR_YAKU).map(y=>({id:y[0],name:y[1],h:y[2],oh:y[3],desc:y[5]||y[4],kind:'normal',rank:y[2]}));
+ const yakuman=Z.map(z=>({id:z[0],name:z[1],h:13,desc:z[2],kind:'yakuman',oh:-1,rank:100}));
+ const ancient=ANCIENT_YAKU.map(a=>({id:a[0],name:a[1],desc:a[2],kind:'ancient',...a[3]}));
+ return normal.concat(yakuman,ancient).sort((a,b)=>a.rank-b.rank);
+}
 function renderYaku(){
  const q=v('yakuSearch').toLowerCase().trim();
- const arr=Y.concat(HONOR_YAKU).map(y=>({id:y[0],name:y[1],h:y[2],oh:y[3],desc:y[5]||y[4],kind:'normal'})).concat(Z.map(z=>({id:z[0],name:z[1],h:13,desc:z[2],kind:'yakuman',oh:-1}))).concat(ANCIENT_YAKU.map(a=>({id:a[0],name:a[1],desc:a[2],kind:'ancient'})));
- const result=arr.filter(y=>((y.name+y.desc+YAKU_EXAMPLES[y.id][2]).toLowerCase().includes(q))&&(yakuFilter==='all'||yakuFilter==='ancient'&&y.kind==='ancient'||yakuFilter==='yakuman'&&y.kind==='yakuman'||y.kind==='normal'&&(yakuFilter==='1'&&y.h===1||yakuFilter==='2'&&y.h===2||yakuFilter==='3'&&y.h>=3)));
- $('yakuCards').innerHTML=result.length?result.map(y=>'<article class="yaku-card"><b>'+y.name+'</b> <span class="badge">'+(y.kind==='ancient'?'古役 · 未启用':y.kind==='yakuman'?'役满':y.h+'番'+(y.oh===-1?' · 门清限定':y.oh<y.h?' / 副露'+y.oh+'番':''))+'</span><p>'+y.desc+'</p>'+(y.kind==='ancient'?'<p class="ancient-note">仅供了解：本工具不按古役加番或计役满。采用条件、番数及复合规则以另行约定为准。</p>':'')+exampleHTML(y.id)+'</article>').join(''):'<p class="sm">没有找到匹配役种。</p>';
+ const result=yakuCatalogue().filter(y=>((y.name+y.desc+(y.detail||'')+(y.label||'')+YAKU_EXAMPLES[y.id][2]).toLowerCase().includes(q))&&(yakuFilter==='all'||yakuFilter==='ancient'&&y.kind==='ancient'||yakuFilter==='yakuman'&&y.kind==='yakuman'||y.kind==='normal'&&(yakuFilter==='1'&&y.h===1||yakuFilter==='2'&&y.h===2||yakuFilter==='3'&&y.h>=3)));
+ $('yakuCards').innerHTML=result.length?result.map(y=>{
+  const badge=y.kind==='ancient'?y.label:y.kind==='yakuman'?'役满':y.h+'番'+(y.oh===-1?' · 门清限定':y.oh<y.h?' / 副露'+y.oh+'番':'');
+  return '<article class="yaku-card" data-kind="'+y.kind+'" data-rank="'+y.rank+'"><b>'+y.name+'</b> <span class="badge"'+(y.kind==='ancient'?' aria-label="古役参考分值：'+badge+'"':'')+'>'+badge+'</span><p>'+y.desc+'</p>'+(y.detail?'<p class="sm">分值版本：'+y.detail+'</p>':'')+exampleHTML(y.id)+'</article>';
+ }).join(''):'<p class="sm">没有找到匹配役种。</p>';
 }
 function renderGlossary(){
  const query=v('termSearch').trim().toLowerCase(),category=v('termCategory');let count=0;

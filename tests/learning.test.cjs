@@ -74,7 +74,7 @@ for (const yaku of [...data.Y, ...data.Z, ...data.HONOR_YAKU, ...data.ANCIENT_YA
 assert.ok(!data.Y.some(y => y[0] === 'yakuhaiExtra'), 'Ambiguous/double-countable extra yakuhai removed');
 assert.equal(data.HONOR_YAKU.length, 4);
 assert.equal(data.HONOR_YAKU[0][1], '役牌 · 白（发、中）');
-assert.equal(data.ANCIENT_YAKU.length, 17);
+assert.equal(data.ANCIENT_YAKU.length, 19);
 for (const [id] of data.ANCIENT_YAKU) {
  assert.ok(!data.Y.concat(data.Z).some(y=>y[0]===id), `Ancient yaku must never become calculator selection: ${id}`);
 }
@@ -86,3 +86,10 @@ const sprite = fs.readFileSync(path.join(root,'assets/tiles.svg'), 'utf8');
 for(let i=0;i<34;i++) assert.ok(sprite.includes(`id="tile-${i}"`), `Tile art ${i}`);
 assert.ok(data.GLOSSARY.flatMap(g=>g[1]).some(t=>t[0]==='自风（席风）/ 场风 / 客风'));
 console.log(`Passed: ${Object.keys(data.YAKU_EXAMPLES).length} winning examples; ${data.GLOSSARY.reduce((n,g) => n+g[1].length, 0)} glossary entries; offline asset.`);
+
+const catalogue=JSON.parse(vm.runInContext('JSON.stringify(yakuCatalogue())',context));
+assert.ok(catalogue.every((y,i)=>i===0||y.rank>=catalogue[i-1].rank),'Guide sorted by reference value');
+assert.ok(data.ANCIENT_YAKU.every(a=>a[3].label&&a[3].rank>0),'Every ancient yaku has a value');
+assert.equal(catalogue.at(-1).id,'daichisei');
+assert.equal(catalogue.find(y=>y.id==='daichisei').label,'双倍役满');
+assert.equal(catalogue.find(y=>y.id==='paarenchan').label,'役满');

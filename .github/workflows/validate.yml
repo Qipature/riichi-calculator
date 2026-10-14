@@ -4,6 +4,7 @@ on:
     paths:
       - index.html
       - learning.js
+      - draws.js
       - assets/**
       - tests/**
       - sw.js
@@ -83,7 +84,9 @@ jobs:
           console.log('PASS: JS syntax, 14 scoring cases, 2 shanten cases, 11 wall mappings, interactive dice smoke, HTML sections');
           NODE
       - name: Validate glossary and winning hand examples
-        run: node tests/learning.test.cjs
+        run: |
+          node tests/learning.test.cjs
+          node tests/draws.test.cjs
       - name: Validate manifest and service worker syntax
         run: |
           node --check sw.js
